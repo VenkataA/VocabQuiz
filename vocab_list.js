@@ -27,7 +27,7 @@ async function loadVocabModules() {
 
         card.innerHTML = `
         <i class="bi bi-book" style="font-size: 2rem;"></i>
-        <div class="mt-2" onclick = initVocab("${obj.loc}"); >${obj.title}</div>
+        <div class="mt-2" onclick = initVocab("${obj.loc}"); ><p class="text-decoration-underline">${obj.title}</p></div>
       `;
 
         container.appendChild(card);
