@@ -1,7 +1,42 @@
 [
-      { "word": "benevolent", "definition": "Well meaning and kindly" },
-      { "word": "audacious", "definition": "Willing to take bold risks" },
-      { "word": "lucid", "definition": "Expressed clearly; easy to understand" },
-      { "word": "ephemeral", "definition": "Lasting for a very short time" },
-      { "word": "pragmatic", "definition": "Dealing with things sensibly and realistically" }
+  {
+    "word": "DEPRAVITY",
+    "definition": "A state of moral corruption or wickedness."
+  },
+  {
+    "word": "PRESUMPTUOUS",
+    "definition": "Overly forward or confident in a way that is rude; taking freedoms without permission."
+  },
+  {
+    "word": "GRANDIOSE",
+    "definition": "Impressive or magnificent in appearance or in effect, often in an exaggerated or pretentious way."
+  },
+  {
+    "word": "DISSEMINATE",
+    "definition": "To scatter or spread widely (especially information or ideas)."
+  },
+  {
+    "word": "ECLECTIC",
+    "definition": "Selecting or composed of elements drawn from various sources."
+  },
+  {
+    "word": "SERVILE",
+    "definition": "Excessively obedient or submissive; like a servant."
+  },
+  {
+    "word": "VORACIOUS",
+    "definition": "Having a huge appetite (for food or metaphorically, for knowledge, etc.)."
+  },
+  {
+    "word": "CONVOLUTED",
+    "definition": "Extremely complicated and difficult to follow."
+  },
+  {
+    "word": "RANT",
+    "definition": "To speak or shout at length in an angry, impassioned way."
+  },
+  {
+    "word": "STRATAGEM",
+    "definition": "A clever plan or scheme, especially one used to outwit someone."
+  }
 ]
