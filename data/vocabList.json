@@ -1,5 +1,12 @@
 [
     {"title": "Unit 1", "loc":"vocab1.json"}
-    ,{"title": "Unit 2", "loc":"vocab1.json"}
-    ,{"title": "Unit 3", "loc":"vocab1.json"}
+    ,{"title": "Unit 2", "loc":"vocab2.json"}
+    ,{"title": "Unit 3", "loc":"vocab3.json"}
+    {"title": "Unit 4", "loc":"vocab4.json"}
+    ,{"title": "Unit 5", "loc":"vocab5.json"}
+    ,{"title": "Unit 6", "loc":"vocab6.json"}
+    {"title": "Unit 7", "loc":"vocab7.json"}
+    ,{"title": "Unit 8", "loc":"vocab8.json"}
+    ,{"title": "Unit 9", "loc":"vocab9.json"}
+    {"title": "Unit 10", "loc":"vocab10.json"}
 ]
