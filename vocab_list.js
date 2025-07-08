@@ -40,11 +40,11 @@ async function loadVocabModules() {
  * @param {} module 
  */
 async function initVocab(mod_url) {
-    console.log("Got innitVocab: "+ mod_url);
-    loadQuestion(mod_url);
+    //console.log("Got innitVocab: "+ mod_url);
+    //loadQuestion(mod_url);
     
-    loadVocab(mod_url).then(data => {
-        vocabulary = data; reset(); loadQuestion();
-    });
-    
+    //loadVocab(mod_url).then(data => {
+    //    vocabulary = data; reset(); startQuiz();
+    //});
+    startQuiz(mod_url);
 }
