@@ -1,39 +1,23 @@
 let vocabulary = [];
-const today = new Date().toISOString().split('T')[0];
-let quizData;
+let quizData = [];
+let dueWords = [];
 let currentIndex = 0;
 let currentAnswer = "";
-
-let dueWords;
-
 let vocabURL = "";
-
+const today = new Date().toISOString().split('T')[0];
 
 async function loadVocab(url) {
-    if (url) vocabURL = url; // Store it globally if provided
-    let json = [];
-    let url = 'data/' + vocalURL;
     try {
-        let response = await fetch(url);
-        json = await response.json();
+        const response = await fetch('data/' + url);
+        return await response.json();
     } catch (err) {
-        console.log("Error: " + err.message);
-        console.log("Looking up: " + url);
-        console.log("Returning: " + json);
+        console.error("Error loading vocab:", err.message);
+        return [];
     }
-    return json;
-}
-
-function reset() {
-    currentIndex = 0;
-    quizData.forEach((currentValue, index, arr) => { arr[index].nextReview = today });
-    dueWords = quizData.filter(item => item.nextReview <= today);
 }
 
 async function loadProgress() {
-
     const saved = localStorage.getItem("vocabProgress");
-    //console.log("saved = " + saved);
     if (saved) return JSON.parse(saved);
     return vocabulary.map(item => ({
         ...item,
@@ -48,24 +32,26 @@ function saveProgress() {
     localStorage.setItem("vocabProgress", JSON.stringify(quizData));
 }
 
-async function loadQuestion(vocabURL) {
-    let localLog = [];
-    try {
-    localLog.push("Got vocabURL");
-    await loadProgress().then((data) => { quizData = data; dueWords = quizData.filter(item => item.nextReview <= today); vocabulary = await loadVocab(vocabURL); }).then(() => reset());
+function reset() {
+    currentIndex = 0;
+    dueWords = quizData.filter(item => item.nextReview <= today);
+}
 
-    // reset();
+async function startQuiz(url) {
+    vocabURL = url;
+    vocabulary = await loadVocab(vocabURL);
+    quizData = await loadProgress();
+    reset();
+    showQuestion();
+}
 
+function showQuestion() {
     if (currentIndex >= dueWords.length) {
         document.querySelector(".card-body").innerHTML = `<h5 class="text-center">All done for today!</h5>`;
         return;
     }
 
-    document.getElementById("submitQuestion").style.visibility = "visible";
-    document.getElementById("nextQuestion").style.visibility = "hidden";
-
     const current = dueWords[currentIndex];
-    document.getElementById("definition").textContent = `Definition: ${current.definition}`;
     currentAnswer = current.word;
 
     const wrongChoices = quizData
@@ -80,21 +66,18 @@ async function loadQuestion(vocabURL) {
     choicesDiv.innerHTML = "";
     allChoices.forEach(choice => {
         choicesDiv.innerHTML += `
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="choice" value="${choice}" id="${choice}">
-          <label class="form-check-label" for="${choice}">${choice}</label>
-        </div>
-      `;
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="choice" value="${choice}" id="${choice}">
+                <label class="form-check-label" for="${choice}">${choice}</label>
+            </div>
+        `;
     });
 
+    document.getElementById("definition").textContent = `Definition: ${current.definition}`;
     document.getElementById("feedback").textContent = "";
-    //document.getElementById("rating").classList.add("d-none");
+    document.getElementById("submitQuestion").style.visibility = "visible";
+    document.getElementById("nextQuestion").style.visibility = "hidden";
     updateProgress();
-    } catch(err) {
-        console.log("Error: " + err.message);
-        console.log(localLog);
-    }
-     console.log(localLog);
 }
 
 function submitAnswer() {
@@ -109,27 +92,25 @@ function submitAnswer() {
 
     document.getElementById("submitQuestion").style.visibility = "hidden";
     document.getElementById("nextQuestion").style.visibility = "visible";
+
     if (answer === currentAnswer) {
         feedback.textContent = "Correct!";
         feedback.className = "text-success";
-
-
     } else {
         feedback.textContent = `Wrong! Correct answer: ${currentAnswer}`;
         feedback.className = "text-danger";
-
     }
-
-    //document.getElementById("rating").classList.remove("d-none");
 }
 
 function nextQuestion() {
     const feedback = document.getElementById("feedback");
-    if (feedback.textContent == "Correct!") {
+    if (feedback.textContent === "Correct!") {
         rateAnswer(4);
     } else {
-       rateAnswer(0);
+        rateAnswer(0);
     }
+    currentIndex++;
+    showQuestion();
 }
 
 function rateAnswer(quality) {
@@ -138,13 +119,7 @@ function rateAnswer(quality) {
     const item = quizData[index];
 
     if (quality >= 3) {
-        if (item.repetition === 0) {
-            item.interval = 1;
-        } else if (item.repetition === 1) {
-            item.interval = 6;
-        } else {
-            item.interval = Math.round(item.interval * item.EF);
-        }
+        item.interval = item.repetition === 0 ? 1 : item.repetition === 1 ? 6 : Math.round(item.interval * item.EF);
         item.repetition += 1;
     } else {
         item.repetition = 0;
@@ -158,9 +133,6 @@ function rateAnswer(quality) {
 
     quizData[index] = item;
     saveProgress();
-
-    currentIndex++;
-    loadQuestion();
 }
 
 function shuffle(array) {
