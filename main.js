@@ -6,7 +6,11 @@ let currentAnswer = "";
 
 let dueWords;
 
-async function loadVocab(vocalURL) {
+let vocabURL = "";
+
+
+async function loadVocab(url) {
+    if (url) vocabURL = url; // Store it globally if provided
     let json = [];
     let url = 'data/' + vocalURL;
     try {
@@ -45,10 +49,10 @@ function saveProgress() {
 }
 
 async function loadQuestion(vocabURL) {
-    localLog = [];
+    let localLog = [];
     try {
     localLog.push("Got vocabURL");
-    await loadProgress().then((data) => { quizData = data; dueWords = quizData.filter(item => item.nextReview <= today); vocabulary = loadVocab(vocabURL); }).then(() => reset());
+    await loadProgress().then((data) => { quizData = data; dueWords = quizData.filter(item => item.nextReview <= today); vocabulary = await loadVocab(vocabURL); }).then(() => reset());
 
     // reset();
 
@@ -123,9 +127,9 @@ function nextQuestion() {
     const feedback = document.getElementById("feedback");
     if (feedback.textContent == "Correct!") {
         rateAnswer(4);
+    } else {
+       rateAnswer(0);
     }
-
-    rateAnswer(0);
 }
 
 function rateAnswer(quality) {
